@@ -1567,6 +1567,8 @@
         sup_cp = 0;
         sup_cd = 0;
 
+        var more_dmg = 1.0;
+
         if(before_Str==0){
             before_Str=after_Str;
         }
@@ -1631,6 +1633,14 @@
             else    {
                 cri_pct = (cri_pct * 1 ) + ( (cri_dmg * 0.15 )).toFixed(2) * 1;
             }
+            more_dmg = 1.3;
+            if (lv >=2)    {
+                more_dmg = 1.6;
+            }
+            else if (lv >= 1) {
+                more_dmg = 1.45;
+            }
+
             explain_str = explain_str + " -> " + cri_pct + "<br>";
             $("#action_explain").append(explain_str);
         }
@@ -1926,31 +1936,33 @@
             $("#action_explain").append(afterComAttackStr);
         }
 
-        if  ($("#delbuf").attr("checked") == "checked")    {
+        console.log("delbuf attr" + $("#delbuf").attr("checked"));
+        console.log("delbuf prop" + $("#delbuf").prop("checked"));
+        var buff2str = "";
+        var str_final2 = str_final;
+        var cri_pct_result2 = cri_pct_result;
+        var cri_dmg_result2 = cri_dmg_result;
+
+        if  ($("#delbuf").prop("checked") == "true")    {
             afterComAttackStr = " 상급 저주반격으로 버프 사라짐" + "<br>";
+            buff2str ="지원가:" + nameArr + "공업:" + supNDStrAddCalc(nameArr) + "  치확:" + supNDCriPctCalc(nameArr).toFixed(4) + "  치피:" + supNDCriDmgCalc(nameArr).toFixed(4);
+            str_final2 = (before_Str * (100 + supNDStrAddCalc(nameArr) - curDiscount ) / 100).toFixed();
+            cri_pct_result2 = getNum(supNDCriPctCalc(nameArr)+getNum(parseFloat(cri_pct))) - curDiscount;
+            cri_dmg_result2 = getNum(supNDCriDmgCalc(nameArr)+getNum(parseFloat(cri_dmg))) - curDiscount;
+
             $("#comattack_after_td").append(afterComAttackStr);
             $("#action_explain").append(afterComAttackStr);
         }
 
-
-        var buff2str ="지원가:" + nameArr + "공업:" + supNDStrAddCalc(nameArr) + "  치확:" + supNDCriPctCalc(nameArr).toFixed(4) + "  치피:" + supNDCriDmgCalc(nameArr).toFixed(4);
         $("#add-dmg1_buff_td").text(buff2str);
 
-        var str_final2 = (before_Str * (100 + supNDStrAddCalc(nameArr) - curDiscount ) / 100).toFixed();
 
-        var cri_pct_result2 = getNum(supNDCriPctCalc(nameArr)+getNum(parseFloat(cri_pct))) - curDiscount;
         if(cri_pct_result2 >= 100){
             cri_pct_result2 = 100;
         }
         if(cri_pct_result2 <= 0){
             cri_pct_result2 = 0;
         }
-
-//        console.log("cri1 : " + getNum(supNDCriDmgCalc(nameArr)));
-//        console.log("cri2 : " + getNum(parseFloat(cri_dmg)));
-//        console.log("cri3 : " + curDiscount);
-
-        var cri_dmg_result2 = getNum(supNDCriDmgCalc(nameArr)+getNum(parseFloat(cri_dmg))) - curDiscount;
 
         var stat2str ="공격력:" + str_final2 + "  치확:" + cri_pct_result2.toFixed(2) + "  치피:" + cri_dmg_result2.toFixed(2) + "\n 방어력:" + armor + "받피감:" + shield ;
         $("#add-dmg1_stat_td").text(stat2str);
