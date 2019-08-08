@@ -181,7 +181,8 @@
                                         <label for="att_char" class="control-label col-sm-3 col-sm-offset-2 col-xs-4 col-xs-offset-1 cu1">공격용병</label>
                                         <div class="col-sm-7 col-xs-6 ">
                                             <select class="form-control" id="atk_char"  onchange="change_atk_char(this);">
-                                                <option value="나르타스" selected>나르타스</option>
+                                                <option value="알렉" selected>알렉</option>
+                                                <option value="나르타스">나르타스</option>
                                                 <option value="라키스">라키스</option>
                                                 <option value="발제">발제</option>
                                                 <option value="아스모드">아스모드</option>
@@ -215,25 +216,25 @@
                                     <div class="form-group">
                                         <label for="base_atStr" class="col-sm-5 col-xs-6 control-label cu">기본 공격력</label>
                                         <div class="col-sm-5 col-xs-6">
-                                            <input type="text" id="base_atStr" class="form-control" value=6225 />
+                                            <input type="text" id="base_atStr" class="form-control" value=2838 />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="base_cri_pct" class="col-sm-5 col-xs-6 control-label cu">기본치명확률</label>
                                         <div class="col-sm-5 col-xs-6">
-                                            <input type="text" id="base_cri_pct" class="form-control" value="35"/>
+                                            <input type="text" id="base_cri_pct" class="form-control" value="10"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="base_cri_dmg" class="col-sm-5 col-xs-6 control-label cu">기본치명피해</label>
                                         <div class="col-sm-5 col-xs-6">
-                                            <input type="text" id="base_cri_dmg" class="form-control" value="75"/>
+                                            <input type="text" id="base_cri_dmg" class="form-control" value="50"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="base_dex" class="col-sm-5 col-xs-6 control-label cu">민첩</label>
                                         <div class="col-sm-5 col-xs-6">
-                                            <input type="text" id="base_dex" class="form-control" value="35"/>
+                                            <input type="text" id="base_dex" class="form-control" value="5"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -254,12 +255,12 @@
                                         <div class="col-sm-7 col-xs-7 ">
                                             <select name="" id="add-dmg1_sel" class="form-control" onchange="selected(event);">
                                                 <option value="none">::선택::</option>
-                                                <option value="common">공X계수</option>
+                                                <option value="common" selected>공X계수</option>
                                                 <option value="crirate">치명확률</option>
                                                 <option value="remainrate">생명력잔존률</option>
                                                 <option value="elossrate">적생명력손실률</option>
                                                 <option value="maxhp">적최대생명력</option>
-                                                <option value="ignore" selected>방어무시</option>
+                                                <option value="ignore">방어무시</option>
                                                 <option value="steel">철갑의필격</option>
                                                 <option value="noshield" >피해감소무시</option>
                                             </select>
@@ -296,17 +297,18 @@
                                                 <option value="maxhp">적최대생명력</option>
                                                 <option value="ignore">방어무시</option>
                                                 <option value="steel">철갑의필격</option>
+                                                <option value="truedmg" selected>고정공격</option>
                                             </select>
                                         </div>
-                                        <div class="skills col-xs-12 bg-info" style="display: none;">
+                                        <div class="skills col-xs-12 bg-info">
                                             <label for="" id="at" class="col-sm-1 col-xs-3 col-sm-offset-4">공</label>
                                             <label for="" class="col-sm-1 col-xs-3">X</label>
                                             <label for="" class="col-sm-2 col-xs-3">계수</label>
                                             <div class="col-sm-2 col-xs-3">
-                                                <input type="text" class="form-control text-center" id="coef2" placeholder="(%)" />
+                                                <input type="text" class="form-control text-center" id="coef2" value="200" />
                                             </div>
                                         </div>
-                                        <div class="steel col-xs-12 bg-info" style="display: none">
+                                        <div class="steel col-xs-12 bg-info">
                                             <label for="" id="at" class="col-sm-2 col-xs-3 col-sm-offset-1">방어력</label>
                                             <div class="col-sm-2 col-xs-3">
                                                 <input type="text" class="form-control text-center" id="steel2" placeholder="(%)" />
@@ -601,7 +603,7 @@
                                 <div class="col-sm-12 col-xs-12 bg-info debuff" id="inc">
                                     <label for="" class="col-sm-3 col-xs-6 cu">받피증</label>
                                     <div class="col-sm-3 col-xs-6 ">
-                                        <input type="text" id="incval" class="form-control text-center" value="0"">
+                                        <input type="text" id="incval" class="form-control text-center" value="0">
                                     </div>
                                     <label for="" class="col-sm-2 col-xs-3 cu">공격전</label>
                                     <div class="col-sm-1 col-xs-3 horizon">
@@ -1008,6 +1010,8 @@
     var hp_d3 = 0;
     var hp_d4 = 0;
 
+    var more_dmg = 100;
+
     function change_def_level(t)
     {
         change_def_char(t);
@@ -1023,13 +1027,13 @@
     function change_atk_char(t)
     {
         var lv = $("#atk_char-level").val();
+        $("#add-dmg2_sel").val("none").attr("selected", "selected");
 
         if ($("#atk_char").val() == "발제" )    {
             $("#base_atStr").val("1396");
             $("#base_cri_pct").val("16");
             $("#base_cri_dmg").val("274.6");
             $("#add-dmg1_sel").val("noshield").attr("selected", "selected");
-            $("#curdefval").val("50");
             $("#incval").val(0);
 
             var adddmg = 100;
@@ -1071,15 +1075,9 @@
                 lv = 10;
                 $("#atk_char-level").val("10").attr("selected", "selected");
             }
-            if (lv >= 10) {
-                adddmg = 250;
-            }
-            else if (lv >= 5) {
-                adddmg = 200;
-            }
-            else if (lv >= 4) {
-                adddmg = 175;
-            }
+            if (lv >= 10)     {                adddmg = 250;            }
+            else if (lv >= 5) {                adddmg = 200;            }
+            else if (lv >= 4) {                adddmg = 175;            }
 
             $("#coef1").val(adddmg);
         }
@@ -1111,12 +1109,39 @@
             else if (lv >=  1)   { adddmg = 125; }
             $("#coef1").val(adddmg);
         }
+        else if  ($("#atk_char").val() == "알렉" ) {
+            $("#base_atStr").val("2838");
+            $("#base_cri_pct").val("10");
+            $("#base_cri_dmg").val("50");
+            $("#add-dmg1_sel").val("common").attr("selected", "selected");
+            $("#add-dmg2_sel").val("truedmg").attr("selected", "selected");
+            $("#incval").val(0);
+
+            var adddmg1 = 200;
+            var adddmg2 = 100;
+
+            if      (lv >= 15)   { adddmg1 = 350; }
+            else if (lv >=  8)   { adddmg1 = 250; }
+            else if (lv >=  7)   { adddmg1 = 225; }
+
+            if      (lv >= 14)   { adddmg1 = 250; }
+            else if (lv >= 13)   { adddmg1 = 225; }
+            else if (lv >=  5)   { adddmg1 = 200; }
+            else if (lv >=  4)   { adddmg1 = 175; }
+            else if (lv >=  2)   { adddmg1 = 150; }
+            else if (lv >=  1)   { adddmg1 = 125; }
+
+            $("#coef1").val(adddmg1);
+            $("#coef1").val(adddmg2);
+        }
     }
 
 
     function change_def_char(t)
     {
-        var lv = $("#atk_char-level").val();
+        console.log("저주 반격 Before : " + $("#curdefval").val());
+
+        var lv = $("#def_char-level").val();
 
         if ($("#def_char").val() == "세실리아" ) {
             $("#hp").val("17934");
@@ -1274,6 +1299,7 @@
                 $("#shield").val("17.481");
             }
         }
+        console.log("저주 반격 After : " + $("#curdefval").val());
     }
 
     function selected(event){
@@ -1529,7 +1555,6 @@
                                     {"치확증":50.955,"받피감":0,"수치":"12강","치피증":84.925,"공증":16.985},{"치확증":50.955,"받피감":0,"수치":"13강","치피증":110.4025,"공증":16.985},
                                     {"치확증":50.955,"받피감":0,"수치":"14강","치피증":135.88,"공증":16.985},{"치확증":50.955,"받피감":0,"수치":"15강","치피증":135.88,"공증":16.985}],
                         };
-    console.log(soldierArr["베로니아"][9]["치확증"]);
 
     function calc(){
         //공격자 지원가 선택 받아오기
@@ -1567,7 +1592,7 @@
         sup_cp = 0;
         sup_cd = 0;
 
-        var more_dmg = 1.0;
+        more_dmg = 100;
 
         if(before_Str==0){
             before_Str=after_Str;
@@ -1633,12 +1658,12 @@
             else    {
                 cri_pct = (cri_pct * 1 ) + ( (cri_dmg * 0.15 )).toFixed(2) * 1;
             }
-            more_dmg = 1.3;
+            more_dmg = 130;
             if (lv >=2)    {
-                more_dmg = 1.6;
+                more_dmg = 160;
             }
             else if (lv >= 1) {
-                more_dmg = 1.45;
+                more_dmg = 145;
             }
 
             explain_str = explain_str + " -> " + cri_pct + "<br>";
@@ -1696,6 +1721,49 @@
             $("#action_explain").append(explain_str);
         }
 
+        var bloodattack = 0;
+        if ($("#atk_char").val() == "알렉" )    {
+            var explain_str = "용병 능력으로 기본 스탯 증가. 턴당 증가는 계산안함 ";
+            var lv = $("#atk_char-level").val();
+
+            if (lv >= 10)   { bloodattack = 1;
+                explain_str = explain_str + "<br>자체 피감으로 횽폭한 격노 발동"
+            }
+
+            for(var i = 0; i <3 ; i++){
+                if(nameArr[i]=="미카엘라"){
+                    bloodattack = 1;
+                    explain_str = explain_str + "<br>미카엘라 버프로 횽폭한 격노 발동"
+                }
+            }
+
+            if (bloodattack == 0)   {
+                explain_str = explain_str + "<br>만피라 횽폭한 격노 발동 안함"
+            }
+            if (lv >= 11) {
+                explain_str = explain_str + " 공격:" + before_Str;
+                plus_str = 100;
+                after_Str = (before_Str * 2).toFixed();
+                explain_str = explain_str + " -> " + after_Str;
+            }
+            else if (lv >= 9)   {
+                explain_str = explain_str + " 공격:" + before_Str;
+                plus_str = 75;
+                after_Str = (before_Str * 1.75).toFixed();
+                explain_str = explain_str + " -> " + after_Str;
+            }
+            else if (lv >= 0)   {
+                explain_str = explain_str + " 공격:" + before_Str;
+                plus_str = 50;
+                after_Str = (before_Str * 1.5).toFixed();
+                explain_str = explain_str + " -> " + after_Str;
+            }
+
+            explain_str = explain_str + " -> " + cri_pct + "<br>";
+            $("#action_explain").append(explain_str);
+        }
+
+
         if ($("#atk_char").val() == "테일러" || $("#atk_char").val() == "에레니르" || $("#atk_char").val() == "아나스타샤" ||
             $("#atk_char").val() == "로건" || $("#atk_char").val() == "드웬" || $("#atk_char").val() == "엘도라" || $("#atk_char").val() == "진" ||
             $("#atk_char").val() == "아이" || $("#atk_char").val() == "웨스터" || $("#atk_char").val() == "레비아" || $("#atk_char").val() == "나르타스" ||
@@ -1734,9 +1802,7 @@
         sup_str = supStrAddCalc(nameArr);
 
         var str_final = (before_Str * (sup_str + plus_str + 100) / 100).toFixed() ;
-        console.log("before_Str : " + before_Str);
-        console.log("sup_str : " + sup_str);
-        console.log("plus_str: " + plus_str);
+
         if(str_final > before_Str*4){
             str_final = before_Str*4;
         }
@@ -1857,8 +1923,8 @@
             var dmg_CX = (str_final * counter_dmg / 100 * (1-shield) * (100 - armor) / 100).toFixed()
             var dmg_CO = (str_final * (100 + cri_dmg_result) * counter_dmg / 10000 * (1-shield) * (100 - armor) / 100).toFixed()
 
-            var cri_x_p = (100-cri_pct_result);
-            var cri_o_p = (cri_pct_result);
+            var cri_x_p = (100-cri_pct_result).toFixed(4);
+            var cri_o_p = (cri_pct_result).toFixed(4);
 
             $("#LCriX").text(dmg_CX);
             $("#LCriO").text(dmg_CO);
@@ -1875,10 +1941,10 @@
 
             setCommonAttack(str_final, armor, shield, cri_dmg_result);
             var dex_p = $("#dex").val();
-            var cri_x_p = (100-cri_pct_result) * (100 - dex_p) / 100;
-            var cri_o_p = (cri_pct_result) * (100 - dex_p) / 100;
-            var m_cri_x_p = (100-cri_pct_result) * (dex_p) / 100;
-            var m_cri_o_p = (cri_pct_result) * (dex_p) / 100;
+            var cri_x_p = ((100-cri_pct_result) * (100 - dex_p) / 100).toFixed(4);
+            var cri_o_p = ((cri_pct_result) * (100 - dex_p) / 100).toFixed(4);
+            var m_cri_x_p = ((100-cri_pct_result) * (dex_p) / 100).toFixed(4);
+            var m_cri_o_p = ((cri_pct_result) * (dex_p) / 100).toFixed(4);
 
             $("#comCriX").append( " (" + cri_x_p + ")%" );
             $("#comCriO").append( " (" + cri_o_p + ")%" );
@@ -1929,6 +1995,7 @@
         var afterComAttackStr = "";
         var curDiscount = 0;
 
+        console.log("저주 반격 : " + $("#curdefval").val());
         if ( getNum(parseInt($("#curdefval").val())) > 0)    {
             afterComAttackStr = "저주반격으로 공격자 Stat " + $("#curdefval").val() + "감소";
             $("#comattack_after_td").text(afterComAttackStr);
@@ -1936,8 +2003,6 @@
             $("#action_explain").append(afterComAttackStr);
         }
 
-        console.log("delbuf attr" + $("#delbuf").attr("checked"));
-        console.log("delbuf prop" + $("#delbuf").prop("checked"));
         var buff2str = "";
         var str_final2 = str_final;
         var cri_pct_result2 = cri_pct_result;
@@ -1965,6 +2030,9 @@
         }
 
         var stat2str ="공격력:" + str_final2 + "  치확:" + cri_pct_result2.toFixed(2) + "  치피:" + cri_dmg_result2.toFixed(2) + "\n 방어력:" + armor + "받피감:" + shield ;
+        if (more_dmg > 100)   {
+            stat2str = stat2str + " 받피증 : " + (more_dmg - 100).toFixed();
+        }
         $("#add-dmg1_stat_td").text(stat2str);
 
         $("#s4_str").text(str_final2);
@@ -1975,24 +2043,42 @@
         // 스킬 공격 실시!
 
         if(skillname1 != "none"){
-//        console.log("cri1 : " + getNum(supNDCriDmgCalc(nameArr)));
-//        console.log("cri2 : " + getNum(parseFloat(cri_dmg)));
-            var explain_str4 = "추가타공격 (" + skillname1 + " / " + coef1 + "% ): " + stat2str + "<br>";
-            $("#action_explain").append(explain_str4);
-            skill1Calc(skillname1,str_final2,coef1,armor,shield,hp,com,comCri,cri_pct_result2,cri_dmg_result2,result1,result1Cri);
+            if (!($("#atk_char").val() == "알렉" && bloodattack ==0))    {
+                var explain_str4 = "추가타공격 (" + skillname1 + " / " + coef1 + "% ): " + stat2str + "<br>";
+                $("#action_explain").append(explain_str4);
+                skill1Calc(skillname1,str_final2,coef1,armor,shield,hp,com,comCri,cri_pct_result2,cri_dmg_result2,result1,result1Cri);
+
+                hp_d1 = hp_d1 - result1;
+                hp_d2 = hp_d2 - result1Cri;
+                hp_d3 = (hp_d3 - result1 * 0.65).toFixed(0);
+                hp_d4 = (hp_d4 - result1Cri * 0.65).toFixed(0);
+
+                if (hp_d1 < 0) hp_d1 = 0;
+                if (hp_d2 < 0) hp_d2 = 0;
+                if (hp_d3 < 0) hp_d3 = 0;
+                if (hp_d4 < 0) hp_d4 = 0;
+
+
+                $("#add-dmg1-criXHP").text(hp_d1);
+                $("#add-dmg1-criOHP").text(hp_d2);
+                $("#miss_add-dmg1-criXHP").text(hp_d3);
+                $("#miss_add-dmg1-criOHP").text(hp_d4);
+
+            }
+
         }else{
             $("#add-dmg1-criX").text(0);
             $("#add-dmg1-criO").text(0);
             $("#miss_add-dmg1-criX").text(0);
             $("#miss_add-dmg1-criO").text(0);
         }
+
+
         if (hp_d1 < 0) hp_d1 = 0;
         if (hp_d2 < 0) hp_d2 = 0;
         if (hp_d3 < 0) hp_d3 = 0;
         if (hp_d4 < 0) hp_d4 = 0;
 
-
-        $("#add-dmg1-criO").append(" (" + cri_pct_result2.toFixed(2) + "%)");
 
         $("#add-dmg1-criX").append( " (" + cri_x_p + ")%" );
         $("#add-dmg1-criO").append( " (" + cri_o_p + ")%" );
@@ -2000,7 +2086,26 @@
         $("#miss_add-dmg1-criO").append( " (" + m_cri_o_p + ")%" );
 
         if(skillname2 != "none"){
-            skill2Calc(skillname2,str_final,coef2,armor,shield,hp,com,comCri,cri_pct_result,cri_dmg_result,result2,result2Cri);
+            var stat3str ="공격력:" + str_final2 + "  치확:" + cri_pct_result2.toFixed(2) + "  치피:" + cri_dmg_result2.toFixed(2) + "\n 방어력:" + armor + "받피감:" + shield ;
+            $("#add-dmg2_stat_td").text(stat3str);
+            skill2Calc(skillname2,str_final2,coef2,armor,shield,hp,com,comCri,cri_pct_result2,cri_dmg_result2,result2,result2Cri);
+
+            hp_d1 = hp_d1 - result2;
+            hp_d2 = hp_d2 - result2Cri;
+            hp_d3 = (hp_d3 - result2 * 0.65).toFixed(0);
+            hp_d4 = (hp_d4 - result2Cri * 0.65).toFixed(0);
+
+            if (hp_d1 < 0) hp_d1 = 0;
+            if (hp_d2 < 0) hp_d2 = 0;
+            if (hp_d3 < 0) hp_d3 = 0;
+            if (hp_d4 < 0) hp_d4 = 0;
+
+            $("#remainHPCriX").text(hp_d1);
+            $("#remainHPCriO").text(hp_d2);
+            $("#miss_remainHPCriX").text(hp_d3);
+            $("#miss_remainHPCriO").text(hp_d4);
+
+
         }else{
             $("#add-dmg2-criX").text(0);
             $("#add-dmg2-criO").text(0);
@@ -2335,7 +2440,13 @@
         var dmg = 0;
         switch(skillname1){
             case "common" 		:
-            case "remainrate" :   dmg = str_final*coef1/100;
+            case "remainrate" :
+                dmg = str_final * coef1;
+                dmg = dmg / 100;
+                dmg = dmg * more_dmg;
+                dmg = dmg / 100;
+                dmg = dmg.toFixed();
+
                 result1 = Math.round(dmgCalc(dmg,armor,shield));
                 result1Cri = Math.round(result1*(1+(cri_dmg_result/100)));
                 $("#add-dmg1-criX").text(result1);
@@ -2435,6 +2546,7 @@
 
     function skill2Calc(skillname2,str_final,coef2,armor,shield,hp,com,comCri,cri_pct_result,cri_dmg_result){
         var dmg = 0;
+
         switch(skillname2){
             case "common" 		:
             case "remainrate" :   dmg = str_final*coef2/100;
@@ -2487,6 +2599,13 @@
                 $("#add-dmg2-criO").text(result2Cri);
                 $("#miss_add-dmg2-criX").text((result2*0.65).toFixed());
                 $("#miss_add-dmg2-criO").text((result2Cri*0.65).toFixed());
+                return;
+            case "truedmg" :   dmg = str_final*coef2/100;
+                result2 = Math.round(dmg);
+                $("#add-dmg2-criX").text(result2);
+                $("#add-dmg2-criO").text(result2);
+                $("#miss_add-dmg2-criX").text(result2);
+                $("#miss_add-dmg2-criO").text(result2);
                 return;
 
         }
