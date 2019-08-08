@@ -2042,11 +2042,21 @@
 
         // 스킬 공격 실시!
 
+        var shield_2 = shield;
+
+        if ($("#atk_char").val() == "나르타스") {
+            if ($("#def_char").val() != "그란힐트") {
+                var explain_str5 = "나르타스 정화로 보호막 날림<br>";
+                $("#action_explain").append(explain_str5);
+                shield_2 = 0;
+            }
+        }
+
         if(skillname1 != "none"){
             if (!($("#atk_char").val() == "알렉" && bloodattack ==0))    {
                 var explain_str4 = "추가타공격 (" + skillname1 + " / " + coef1 + "% ): " + stat2str + "<br>";
                 $("#action_explain").append(explain_str4);
-                skill1Calc(skillname1,str_final2,coef1,armor,shield,hp,com,comCri,cri_pct_result2,cri_dmg_result2,result1,result1Cri);
+                skill1Calc(skillname1,str_final2,coef1,armor,shield_2,hp,com,comCri,cri_pct_result2,cri_dmg_result2,result1,result1Cri);
 
                 hp_d1 = hp_d1 - result1;
                 hp_d2 = hp_d2 - result1Cri;
@@ -2088,7 +2098,7 @@
         if(skillname2 != "none"){
             var stat3str ="공격력:" + str_final2 + "  치확:" + cri_pct_result2.toFixed(2) + "  치피:" + cri_dmg_result2.toFixed(2) + "\n 방어력:" + armor + "받피감:" + shield ;
             $("#add-dmg2_stat_td").text(stat3str);
-            skill2Calc(skillname2,str_final2,coef2,armor,shield,hp,com,comCri,cri_pct_result2,cri_dmg_result2,result2,result2Cri);
+            skill2Calc(skillname2,str_final2,coef2,armor,shield_2,hp,com,comCri,cri_pct_result2,cri_dmg_result2,result2,result2Cri);
 
             hp_d1 = hp_d1 - result2;
             hp_d2 = hp_d2 - result2Cri;
