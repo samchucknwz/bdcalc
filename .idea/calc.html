@@ -878,10 +878,6 @@
                             <th>일반공격후액션</th>
                             <td id="comattack_after_td" colspan="4">저주 / 버프사라짐 등</td>
                         </tr>
-                        <tr id="add-dmg1_stat">
-                            <th>추가피해1스탯</th>
-                            <td id="add-dmg1_stat_td" colspan="4">0</td>
-                        </tr>
                         <tr id="add-dmg1_buff">
                             <th>일반공격후버프</th>
                             <td id="add-dmg1_buff_td" colspan="4">-</td>
@@ -899,6 +895,10 @@
                             <td id="hpregen-criOHP">0</td>
                             <td id="miss_hpregen-criXHP">0</td>
                             <td id="miss_hpregen-criOHP">0</td>
+                        </tr>
+                        <tr id="add-dmg1_stat">
+                            <th>추가피해1스탯</th>
+                            <td id="add-dmg1_stat_td" colspan="4">0</td>
                         </tr>
                         <tr id="add-dmg1">
                             <th>추가피해1</th>
@@ -1124,12 +1124,12 @@
             else if (lv >=  8)   { adddmg1 = 250; }
             else if (lv >=  7)   { adddmg1 = 225; }
 
-            if      (lv >= 14)   { adddmg1 = 250; }
-            else if (lv >= 13)   { adddmg1 = 225; }
-            else if (lv >=  5)   { adddmg1 = 200; }
-            else if (lv >=  4)   { adddmg1 = 175; }
-            else if (lv >=  2)   { adddmg1 = 150; }
-            else if (lv >=  1)   { adddmg1 = 125; }
+            if      (lv >= 14)   { adddmg2 = 250; }
+            else if (lv >= 13)   { adddmg2 = 225; }
+            else if (lv >=  5)   { adddmg2 = 200; }
+            else if (lv >=  4)   { adddmg2 = 175; }
+            else if (lv >=  2)   { adddmg2 = 150; }
+            else if (lv >=  1)   { adddmg2 = 125; }
 
             $("#coef1").val(adddmg1);
             $("#coef2").val(adddmg2);
@@ -1723,22 +1723,22 @@
 
         var bloodattack = 0;
         if ($("#atk_char").val() == "알렉" )    {
-            var explain_str = "용병 능력으로 기본 스탯 증가. 턴당 증가는 계산안함 ";
+            var explain_str = "용병 능력으로 기본 스탯 증가. 턴당 증가는 계산안함<br>";
             var lv = $("#atk_char-level").val();
 
             if (lv >= 10)   { bloodattack = 1;
-                explain_str = explain_str + "<br>자체 피감으로 횽폭한 격노 발동"
+                explain_str = explain_str + "자체 피감으로 횽폭한 격노 발동<br>"
             }
 
             for(var i = 0; i <3 ; i++){
                 if(nameArr[i]=="미카엘라"){
                     bloodattack = 1;
-                    explain_str = explain_str + "<br>미카엘라 버프로 횽폭한 격노 발동"
+                    explain_str = explain_str + "미카엘라 버프로 횽폭한 격노 발동<br>"
                 }
             }
 
             if (bloodattack == 0)   {
-                explain_str = explain_str + "<br>만피라 횽폭한 격노 발동 안함"
+                explain_str = explain_str + "만피라 횽폭한 격노 발동 안함<br>"
             }
             if (lv >= 11) {
                 explain_str = explain_str + " 공격:" + before_Str;
@@ -1825,8 +1825,10 @@
         supCheckND(nameArr);
 
         // 일반 공격전 버프 표시.
-        var buff1str = "자체공업:" + plus_str + " 지원가:" + nameArr + "공업:" + supStrAddCalc(nameArr) + "  치확:" + supCriPctCalc(nameArr).toFixed(4) + "  치피:" + supCriDmgCalc(nameArr).toFixed(4);
-        $("#comattack_buff_td").text(buff1str);
+        var buff1str = "자체공업:" + plus_str + "<br> 지원가:" + nameArr + "<br>공업:" + (supStrAddCalc(nameArr).toFixed(4) *1).toString()
+              + "  치확:" + (supCriPctCalc(nameArr).toFixed(4) * 1).toString() + "  치피:" + (supCriDmgCalc(nameArr).toFixed(4) *1).toString();
+        $("#comattack_buff_td").text("");
+        $("#comattack_buff_td").append(buff1str);
 
         var explain_str2 = "지원가 버프 진행 : " + buff1str + "<br>";
         $("#action_explain").append(explain_str2);
@@ -1845,7 +1847,8 @@
         var comCri = Math.round(com*(1+(cri_dmg_result/100)));
 
         // 일반 공격전 스탯 표시.
-        var stat1str ="공격력:" + str_final + "  치확:" + cri_pct_result.toFixed(2) + "  치피:" + cri_dmg_result.toFixed(2) + "\n 방어력:" + armor + "받피감:" + shield ;
+        var stat1str ="공격력:" + str_final + "  치확:" + (cri_pct_result.toFixed(4) * 1).toString()
+            + "  치피:" + (cri_dmg_result.toFixed(4) * 1).toString() + "\n 방어력:" + armor + "받피감:" + shield ;
         $("#comattack_stat_td").text(stat1str);
 
         if  ($("#atk_char").val() == "아스모드" ) {
@@ -1941,10 +1944,10 @@
 
             setCommonAttack(str_final, armor, shield, cri_dmg_result);
             var dex_p = $("#dex").val();
-            var cri_x_p = ((100-cri_pct_result) * (100 - dex_p) / 100).toFixed(4);
-            var cri_o_p = ((cri_pct_result) * (100 - dex_p) / 100).toFixed(4);
-            var m_cri_x_p = ((100-cri_pct_result) * (dex_p) / 100).toFixed(4);
-            var m_cri_o_p = ((cri_pct_result) * (dex_p) / 100).toFixed(4);
+            var cri_x_p = (((100-cri_pct_result) * (100 - dex_p) / 100).toFixed(4) * 1).toString();
+            var cri_o_p = (((cri_pct_result) * (100 - dex_p) / 100).toFixed(4) * 1).toString();
+            var m_cri_x_p = (((100-cri_pct_result) * (dex_p) / 100).toFixed(4) * 1).toString();
+            var m_cri_o_p = (((cri_pct_result) * (dex_p) / 100).toFixed(4) * 1).toString();
 
             $("#comCriX").append( " (" + cri_x_p + ")%" );
             $("#comCriO").append( " (" + cri_o_p + ")%" );
@@ -1997,8 +2000,9 @@
 
         console.log("저주 반격 : " + $("#curdefval").val());
         if ( getNum(parseInt($("#curdefval").val())) > 0)    {
-            afterComAttackStr = "저주반격으로 공격자 Stat " + $("#curdefval").val() + "감소";
-            $("#comattack_after_td").text(afterComAttackStr);
+            afterComAttackStr = "저주반격으로 공격자 Stat " + $("#curdefval").val() + "감소<br>";
+            $("#comattack_after_td").text("");
+            $("#comattack_after_td").append(afterComAttackStr);
             curDiscount = getNum($("#curdefval").val());
             $("#action_explain").append(afterComAttackStr);
         }
@@ -2015,11 +2019,20 @@
             cri_pct_result2 = getNum(supNDCriPctCalc(nameArr)+getNum(parseFloat(cri_pct))) - curDiscount;
             cri_dmg_result2 = getNum(supNDCriDmgCalc(nameArr)+getNum(parseFloat(cri_dmg))) - curDiscount;
 
+            $("#comattack_after_td").text("");
             $("#comattack_after_td").append(afterComAttackStr);
             $("#action_explain").append(afterComAttackStr);
+
+            $("#add-dmg1_buff_td").text(buff2str);
+
+        }
+        else if ( curDiscount > 0)  {
+            str_final2 = (before_Str * (100 + supStrAddCalc(nameArr) - curDiscount ) / 100).toFixed();
+            cri_pct_result2 = getNum(supCriPctCalc(nameArr)+getNum(parseFloat(cri_pct))) - curDiscount;
+            cri_dmg_result2 = getNum(supCriDmgCalc(nameArr)+getNum(parseFloat(cri_dmg))) - curDiscount;
+
         }
 
-        $("#add-dmg1_buff_td").text(buff2str);
 
 
         if(cri_pct_result2 >= 100){
@@ -2054,7 +2067,7 @@
 
         if(skillname1 != "none"){
             if (!($("#atk_char").val() == "알렉" && bloodattack ==0))    {
-                var explain_str4 = "추가타공격 (" + skillname1 + " / " + coef1 + "% ): " + stat2str + "<br>";
+                var explain_str4 = "추가타공격 (" + skillname1 + " / " + coef1 + "% )<br> " + stat2str + "<br>";
                 $("#action_explain").append(explain_str4);
                 skill1Calc(skillname1,str_final2,coef1,armor,shield_2,hp,com,comCri,cri_pct_result2,cri_dmg_result2,result1,result1Cri);
 
@@ -2098,6 +2111,8 @@
         if(skillname2 != "none"){
             var stat3str ="공격력:" + str_final2 + "  치확:" + cri_pct_result2.toFixed(2) + "  치피:" + cri_dmg_result2.toFixed(2) + "\n 방어력:" + armor + "받피감:" + shield ;
             $("#add-dmg2_stat_td").text(stat3str);
+            var explain_str5 = "추가2타공격 (" + skillname2 + " / " + coef2 + "% )<br> " + stat3str + "<br>";
+            $("#action_explain").append(explain_str5);
             skill2Calc(skillname2,str_final2,coef2,armor,shield_2,hp,com,comCri,cri_pct_result2,cri_dmg_result2,result2,result2Cri);
 
             hp_d1 = hp_d1 - result2;
